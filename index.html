@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-app="marvelheros">
+
+
+<div ng-controller="character">
+
+Name Starts With<input type="text" ng-change="updateHeros()" ng-model="nameStartsWith">
+
+    <!--{{name}}-->
+<table>
+   <tr ng-repeat="hero in heros">
+       <td>{{hero.name}}</td>
+       <td><img width="100" ng-src="{{hero.thumbnail.path}}.{{hero.thumbnail.extension}}"></td>
+
+   </tr>
+
+</table>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+<script type="text/javascript">
+<!--this is creating angular app-->
+    var app= angular.module("marvelheros", []);
+
+
+
+app.controller("character", ["$scope", "$http", function($scope, $http){
+
+$scope.nameStartsWith= ""
+
+$http.get("https://gateway.marvel.com/v1/public/characters?ts=1&apikey=25767d4743c76e9baa48d1d9f6b87667&hash=17516fd0a913a2718481d09e9aea23ca")
+.then(function(response) {
+    $scope.heros =  response.data.data.results;
+});
+
+$scope.updateHeros = function(){
+    $http.get("https://gateway.marvel.com/v1/public/characters?ts=1&apikey=25767d4743c76e9baa48d1d9f6b87667&hash=17516fd0a913a2718481d09e9aea23ca&nameStartsWith=" + $scope.nameStartsWith)
+.then(function(response) {
+    $scope.heros =  response.data.data.results;
+});
+}
+
+
+}]);
+
+</script>
+</body>
+</html>
